@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "FPCamCharacter.generated.h"
 
 
@@ -17,11 +18,15 @@ public:
 	// Sets default values for this character's properties
 	AFPCamCharacter();
 
+	void MoveLRAction(float movementDelta);
+
+	void MoveFBAction(float movementDelta);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

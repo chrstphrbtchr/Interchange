@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FPCamCharacter.h"
 #include "GameFramework/GameModeBase.h"
 #include "InterchangeGameModeBase.generated.h"
 
@@ -14,4 +15,6 @@ class INTERCHANGE_API AInterchangeGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	AInterchangeGameModeBase();
 };

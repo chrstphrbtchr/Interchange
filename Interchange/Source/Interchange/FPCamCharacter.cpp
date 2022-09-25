@@ -14,7 +14,11 @@ AFPCamCharacter::AFPCamCharacter()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	bUseControllerRotationYaw = false;	// Yaw is defaulted to true?
 
+	//create components
 	cam = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+
+	//setup camera
+	//Camera->FieldOfView = 120.f;    //FOV changer
 	cam->SetupAttachment(RootComponent);	// Attaches to center of player object.
 	cam->SetRelativeLocation(FVector(0, 0, 40));	// ? Might need to be changed for player
 
@@ -44,6 +48,9 @@ void AFPCamCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	InputComponent->BindAxis("Rot_Horizontal", this, &AFPCamCharacter::HorizontalRotation);
 	InputComponent->BindAxis("Rot_Vertical", this, &AFPCamCharacter::VerticalRotation);
 
+	//LRMovement bindings
+	PlayerInputComponent->BindAxis("MoveLR", this, &AFPCamCharacter::MoveLRAction);
+	PlayerInputComponent->BindAxis("MoveFB", this, &AFPCamCharacter::MoveFBAction);
 }
 
 void AFPCamCharacter::HorizontalRotation(float value) 
@@ -63,5 +70,23 @@ void AFPCamCharacter::VerticalRotation(float value)
 			cam->AddLocalRotation(FRotator(value, 0, 0));
 		}
 	}
+}
+
+void AFPCamCharacter::MoveLRAction(float movementDelta)
+{
+	FVector newLocation = GetActorLocation();
+	FVector horizontalVector = GetActorRightVector();
+	newLocation += (horizontalVector *movementDelta*7.0f);
+	//global implementation, instead of local rotation based
+	//newLocation.Y += (movementDelta*7.0f);
+	SetActorLocation(newLocation);
+}
+
+void AFPCamCharacter::MoveFBAction(float movementDelta)
+{
+	FVector newLocation = GetActorLocation();
+	FVector forwardVector = GetActorForwardVector();
+	newLocation += (forwardVector * movementDelta * 7.0f);
+	SetActorLocation(newLocation);
 }
 
