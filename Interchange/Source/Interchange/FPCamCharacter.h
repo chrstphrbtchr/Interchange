@@ -40,4 +40,10 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		UCameraComponent* cam;
+
+	// Jump
+	void CheckJump();	// One jump only
+
+	UPROPERTY()
+		bool jumping;
 };
