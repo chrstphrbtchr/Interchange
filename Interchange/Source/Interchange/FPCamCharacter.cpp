@@ -99,3 +99,7 @@ void AFPCamCharacter::MoveFBAction(float movementDelta)
 	SetActorLocation(newLocation);
 }
 
+void MantleJump()
+{
+	
+}

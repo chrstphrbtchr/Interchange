@@ -46,4 +46,6 @@ private:
 
 	UPROPERTY()
 		bool jumping;
+
+	void MantleJump();
 };
