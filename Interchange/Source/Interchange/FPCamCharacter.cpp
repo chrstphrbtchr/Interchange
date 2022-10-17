@@ -18,9 +18,9 @@ AFPCamCharacter::AFPCamCharacter()
 	cam = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
 	//setup camera
-	//Camera->FieldOfView = 120.f;    //FOV changer
-	cam->SetupAttachment(RootComponent);	// Attaches to center of player object.
-	cam->SetRelativeLocation(FVector(-50, 0, 50));	// ? Might need to be changed for player
+	//Camera->FieldOfView = 120.f;					//FOV changer
+	cam->SetupAttachment(RootComponent);			// Attaches to center of player object.
+	cam->SetRelativeLocation(FVector(0, 0, 50));	// ? Might need to be changed for player
 
 	jumping = false;
 }
