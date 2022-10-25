@@ -23,6 +23,7 @@ AFPCamCharacter::AFPCamCharacter()
 	cam->SetRelativeLocation(FVector(0, 0, 50));	// ? Might need to be changed for player
 
 	jumping = false;
+	swapAvailable = false;
 	swapTarget = (AActor *) NULL;
 }
 
@@ -106,27 +107,33 @@ void AFPCamCharacter::MoveFBAction(float movementDelta)
 
 void AFPCamCharacter::SelectTarget()
 {
-	//THIS ISN'T REGISTERING A HIT PROPERLY
-	FHitResult InteractHit = FHitResult(ForceInit);
-	//This if statement is needed, but I have not been able to figure out how to check Class types.
-	/*if (InteractHit.GetActor()->GetClass()->IsChildOf(ASwappableActor::StaticClass()))
+	FHitResult InteractHit;
+	FVector const CamLoc = cam->GetComponentLocation();
+	FRotator const CamRot = cam->GetComponentRotation();
+	//NEED TO ADD TRACEPARAMS TO THE FUNCTION CALL BELOW THIS
+	bool bHit = GetWorld()->LineTraceSingleByChannel(InteractHit, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
+	if (bHit)
 	{
-		swapTarget = InteractHit.GetActor()->GetParentActor(); <-------PUT LINE 116 here later.
-	}*/
-	swapTarget = InteractHit.GetActor();//<-WITH LINE 110 this returns NULL
+		swapTarget = InteractHit.GetActor();//<- if bHit was false, this would return NULL.
+		swapAvailable = true;
+	}
+	else
+	{
+		swapAvailable = false;
+	}
 }
 
 void AFPCamCharacter::SwapPlayerTarget()
 {
-	//Crashes on 121 with EXCEPTION ADDRESS VIOLATION
-	/*
-	FVector finalDestination = swapTarget->GetActorLocation();
-	FVector startingPoint = GetActorLocation();
-	swapTarget->SetActorEnableCollision(false);
-	swapTarget->SetActorLocation(startingPoint);
-	SetActorLocation(finalDestination);
-	swapTarget->SetActorEnableCollision(true);
-	*/
+	if (swapAvailable)
+	{
+		FVector finalDestination = swapTarget->GetActorLocation();
+		FVector startingPoint = GetActorLocation();
+		swapTarget->SetActorEnableCollision(false);
+		swapTarget->SetActorLocation(startingPoint);
+		SetActorLocation(finalDestination);
+		swapTarget->SetActorEnableCollision(true);
+	}
 }
 
 void MantleJump()

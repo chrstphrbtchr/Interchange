@@ -51,6 +51,7 @@ private:
 	UPROPERTY()
 		bool jumping;
 		AActor *swapTarget;
+		bool swapAvailable;
 
 	void MantleJump();
 };
