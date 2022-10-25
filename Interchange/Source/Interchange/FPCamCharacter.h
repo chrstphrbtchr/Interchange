@@ -48,10 +48,15 @@ private:
 	void SelectTarget();
 	void SwapPlayerTarget();
 
+	//Sprint
+	void SpeedUp();
+	void SpeedDown();
+
 	UPROPERTY()
 		bool jumping;
 		AActor *swapTarget;
 		bool swapAvailable;
+		float playerSpeed;
 
 	void MantleJump();
 };

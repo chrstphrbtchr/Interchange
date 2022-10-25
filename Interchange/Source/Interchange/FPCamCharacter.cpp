@@ -25,6 +25,7 @@ AFPCamCharacter::AFPCamCharacter()
 	jumping = false;
 	swapAvailable = false;
 	swapTarget = (AActor *) NULL;
+	playerSpeed = 7.0f;
 }
 
 // Called when the game starts or when spawned
@@ -62,6 +63,10 @@ void AFPCamCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	//Swap Left Click
 	InputComponent->BindAction("LeftClick", IE_Pressed, this, &AFPCamCharacter::SelectTarget);
 	InputComponent->BindAction("LeftClick", IE_Released, this, &AFPCamCharacter::SwapPlayerTarget);
+
+	//Sprint Inputs
+	InputComponent->BindAction("Sprint", IE_Pressed, this, &AFPCamCharacter::SpeedUp);
+	InputComponent->BindAction("Sprint", IE_Released, this, &AFPCamCharacter::SpeedDown);
 }
 
 void AFPCamCharacter::CheckJump() {
@@ -91,7 +96,7 @@ void AFPCamCharacter::MoveLRAction(float movementDelta)
 {
 	FVector newLocation = GetActorLocation();
 	FVector horizontalVector = GetActorRightVector();
-	newLocation += (horizontalVector *movementDelta*7.0f);
+	newLocation += (horizontalVector *movementDelta*playerSpeed);
 	//global implementation, instead of local rotation based
 	//newLocation.Y += (movementDelta*7.0f);
 	SetActorLocation(newLocation);
@@ -101,7 +106,7 @@ void AFPCamCharacter::MoveFBAction(float movementDelta)
 {
 	FVector newLocation = GetActorLocation();
 	FVector forwardVector = GetActorForwardVector();
-	newLocation += (forwardVector * movementDelta * 7.0f);
+	newLocation += (forwardVector * movementDelta * playerSpeed);
 	SetActorLocation(newLocation);
 }
 
@@ -134,6 +139,16 @@ void AFPCamCharacter::SwapPlayerTarget()
 		SetActorLocation(finalDestination);
 		swapTarget->SetActorEnableCollision(true);
 	}
+}
+
+void AFPCamCharacter::SpeedUp()
+{
+	playerSpeed = 14.0f;
+}
+
+void AFPCamCharacter::SpeedDown()
+{
+	playerSpeed = 7.0f;
 }
 
 void MantleJump()
