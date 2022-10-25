@@ -23,7 +23,7 @@ AFPCamCharacter::AFPCamCharacter()
 	cam->SetRelativeLocation(FVector(0, 0, 50));	// ? Might need to be changed for player
 
 	jumping = false;
-	//swapTarget = NULL;
+	swapTarget = (AActor *) NULL;
 }
 
 // Called when the game starts or when spawned
@@ -106,24 +106,27 @@ void AFPCamCharacter::MoveFBAction(float movementDelta)
 
 void AFPCamCharacter::SelectTarget()
 {
+	//THIS ISN'T REGISTERING A HIT PROPERLY
 	FHitResult InteractHit = FHitResult(ForceInit);
 	//This if statement is needed, but I have not been able to figure out how to check Class types.
 	/*if (InteractHit.GetActor()->GetClass()->IsChildOf(ASwappableActor::StaticClass()))
 	{
-		swapTarget = InteractHit.GetActor()->GetParentActor(); <-------THE PROBLEM can't bind AACTOR* to AACTOR
+		swapTarget = InteractHit.GetActor()->GetParentActor(); <-------PUT LINE 116 here later.
 	}*/
-	
+	swapTarget = InteractHit.GetActor();//<-WITH LINE 110 this returns NULL
 }
 
 void AFPCamCharacter::SwapPlayerTarget()
 {
-	//ALL OF THIS SHOULD WORK, BUT I CAN't FIGURE OUT HOW TO SET SWAPTARGET TO AACTOR instead of AACTOR*
-	/*FVector finalDestination = swapTarget.GetActorLocation();
+	//Crashes on 121 with EXCEPTION ADDRESS VIOLATION
+	/*
+	FVector finalDestination = swapTarget->GetActorLocation();
 	FVector startingPoint = GetActorLocation();
-	swapTarget.SetActorEnableCollision(false);
-	swapTarget.SetActorLocation(startingPoint);
+	swapTarget->SetActorEnableCollision(false);
+	swapTarget->SetActorLocation(startingPoint);
 	SetActorLocation(finalDestination);
-	swapTarget.SetActorEnableCollision(true);*/
+	swapTarget->SetActorEnableCollision(true);
+	*/
 }
 
 void MantleJump()

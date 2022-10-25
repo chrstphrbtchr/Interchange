@@ -50,7 +50,7 @@ private:
 
 	UPROPERTY()
 		bool jumping;
-		AActor swapTarget;
+		AActor *swapTarget;
 
 	void MantleJump();
 };
