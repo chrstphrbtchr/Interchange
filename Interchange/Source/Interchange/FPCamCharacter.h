@@ -44,8 +44,13 @@ private:
 	// Jump
 	void CheckJump();	// One jump only
 
+	// Swap
+	void SelectTarget();
+	void SwapPlayerTarget();
+
 	UPROPERTY()
 		bool jumping;
+		AActor swapTarget;
 
 	void MantleJump();
 };

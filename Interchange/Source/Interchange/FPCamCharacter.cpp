@@ -23,6 +23,7 @@ AFPCamCharacter::AFPCamCharacter()
 	cam->SetRelativeLocation(FVector(0, 0, 50));	// ? Might need to be changed for player
 
 	jumping = false;
+	//swapTarget = NULL;
 }
 
 // Called when the game starts or when spawned
@@ -56,6 +57,10 @@ void AFPCamCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	//Jump input
 	InputComponent->BindAction("Jump", IE_Pressed,  this, &AFPCamCharacter::CheckJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &AFPCamCharacter::CheckJump);
+
+	//Swap Left Click
+	InputComponent->BindAction("LeftClick", IE_Pressed, this, &AFPCamCharacter::SelectTarget);
+	InputComponent->BindAction("LeftClick", IE_Released, this, &AFPCamCharacter::SwapPlayerTarget);
 }
 
 void AFPCamCharacter::CheckJump() {
@@ -97,6 +102,28 @@ void AFPCamCharacter::MoveFBAction(float movementDelta)
 	FVector forwardVector = GetActorForwardVector();
 	newLocation += (forwardVector * movementDelta * 7.0f);
 	SetActorLocation(newLocation);
+}
+
+void AFPCamCharacter::SelectTarget()
+{
+	FHitResult InteractHit = FHitResult(ForceInit);
+	//This if statement is needed, but I have not been able to figure out how to check Class types.
+	/*if (InteractHit.GetActor()->GetClass()->IsChildOf(ASwappableActor::StaticClass()))
+	{
+		swapTarget = InteractHit.GetActor()->GetParentActor(); <-------THE PROBLEM can't bind AACTOR* to AACTOR
+	}*/
+	
+}
+
+void AFPCamCharacter::SwapPlayerTarget()
+{
+	//ALL OF THIS SHOULD WORK, BUT I CAN't FIGURE OUT HOW TO SET SWAPTARGET TO AACTOR instead of AACTOR*
+	/*FVector finalDestination = swapTarget.GetActorLocation();
+	FVector startingPoint = GetActorLocation();
+	swapTarget.SetActorEnableCollision(false);
+	swapTarget.SetActorLocation(startingPoint);
+	SetActorLocation(finalDestination);
+	swapTarget.SetActorEnableCollision(true);*/
 }
 
 void MantleJump()
