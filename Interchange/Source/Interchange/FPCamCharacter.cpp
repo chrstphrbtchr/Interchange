@@ -113,19 +113,31 @@ void AFPCamCharacter::MoveFBAction(float movementDelta)
 void AFPCamCharacter::SelectTarget()
 {
 	FHitResult InteractHit;
+	TArray<FHitResult, FDefaultAllocator> InteractHits;
 	FVector const CamLoc = cam->GetComponentLocation();
 	FRotator const CamRot = cam->GetComponentRotation();
-	//NEED TO ADD TRACEPARAMS TO THE FUNCTION CALL BELOW THIS
-	bool bHit = GetWorld()->LineTraceSingleByChannel(InteractHit, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
-	if (bHit)
+	bool BHit = GetWorld()->LineTraceMultiByChannel(InteractHits, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
+	//bool bHit = GetWorld()->LineTraceSingleByChannel(InteractHit, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
+	if (InteractHits.Num() > 0)
 	{
-		swapTarget = InteractHit.GetActor();//<- if bHit was false, this would return NULL.
+		//NEVER BEING ACCESSED (Accessing it without the check crashes, because there is no data to check.
+		swapTarget = InteractHits.GetData()->GetActor();
 		swapAvailable = true;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit inside"));
 	}
 	else
 	{
 		swapAvailable = false;
 	}
+	
+	/*
+	if (bHit)
+	{
+		swapTarget = InteractHit.GetActor();//<- if bHit was false, this would return NULL.
+		swapAvailable = true;
+	}
+	*/
+	
 }
 
 void AFPCamCharacter::SwapPlayerTarget()
@@ -133,11 +145,18 @@ void AFPCamCharacter::SwapPlayerTarget()
 	if (swapAvailable)
 	{
 		FVector finalDestination = swapTarget->GetActorLocation();
+		FVector targetVelocity = swapTarget->GetVelocity();
+		//NEED TO FIGURE OUT HOW TO ACCESS MASS
+		FVector playerVelocity = GetVelocity();
 		FVector startingPoint = GetActorLocation();
 		swapTarget->SetActorEnableCollision(false);
 		swapTarget->SetActorLocation(startingPoint);
 		SetActorLocation(finalDestination);
+		GetRootComponent()->ComponentVelocity = targetVelocity;
+		swapTarget->GetRootComponent()->ComponentVelocity = playerVelocity;
 		swapTarget->SetActorEnableCollision(true);
+		
+
 	}
 }
 
