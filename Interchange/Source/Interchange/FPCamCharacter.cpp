@@ -116,7 +116,7 @@ void AFPCamCharacter::SelectTarget()
 	TArray<FHitResult, FDefaultAllocator> InteractHits;
 	FVector const CamLoc = cam->GetComponentLocation();
 	FRotator const CamRot = cam->GetComponentRotation();
-	bool BHit = GetWorld()->LineTraceMultiByChannel(InteractHits, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
+	bool BHit = GetWorld()->LineTraceMultiByChannel(InteractHits, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_GameTraceChannel1);
 	//bool bHit = GetWorld()->LineTraceSingleByChannel(InteractHit, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
 	if (InteractHits.Num() > 0)
 	{
