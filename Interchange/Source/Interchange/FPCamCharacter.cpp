@@ -117,13 +117,22 @@ void AFPCamCharacter::SelectTarget()
 	FVector const CamLoc = cam->GetComponentLocation();
 	FRotator const CamRot = cam->GetComponentRotation();
 	bool BHit = GetWorld()->LineTraceMultiByChannel(InteractHits, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_GameTraceChannel1);
-	//bool bHit = GetWorld()->LineTraceSingleByChannel(InteractHit, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(InteractHit, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
 	if (InteractHits.Num() > 0)
 	{
-		//NEVER BEING ACCESSED (Accessing it without the check crashes, because there is no data to check.
-		swapTarget = InteractHits.GetData()->GetActor();
-		swapAvailable = true;
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit inside"));
+		if (bHit)
+		{
+			if (InteractHit.GetActor() == InteractHits.GetData()->GetActor())
+			{
+				swapTarget = InteractHits.GetData()->GetActor();
+				swapAvailable = true;
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Hit inside"));
+			}
+			else
+			{
+				swapAvailable = false;
+			}
+		}
 	}
 	else
 	{
