@@ -26,6 +26,7 @@ AFPCamCharacter::AFPCamCharacter()
 	swapAvailable = false;
 	swapTarget = (AActor *) NULL;
 	playerSpeed = 7.0f;
+
 }
 
 // Called when the game starts or when spawned
