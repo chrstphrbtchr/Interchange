@@ -95,20 +95,32 @@ void AFPCamCharacter::VerticalRotation(float value)
 
 void AFPCamCharacter::MoveLRAction(float movementDelta)
 {
-	FVector newLocation = GetActorLocation();
+	if ((Controller) && (movementDelta != 0.0f)) {
+		FVector horizontalVector = GetActorRightVector();
+		movementDelta *= playerSpeed;
+		AddMovementInput(horizontalVector, movementDelta);
+	}
+	// -----------------------------
+	/*FVector newLocation = GetActorLocation();
 	FVector horizontalVector = GetActorRightVector();
 	newLocation += (horizontalVector *movementDelta*playerSpeed);
 	//global implementation, instead of local rotation based
 	//newLocation.Y += (movementDelta*7.0f);
-	SetActorLocation(newLocation);
+	SetActorLocation(newLocation);*/
 }
 
 void AFPCamCharacter::MoveFBAction(float movementDelta)
 {
-	FVector newLocation = GetActorLocation();
+	if ((Controller) && (movementDelta != 0.0f)) {
+		FVector forwardVector = GetActorForwardVector();
+		movementDelta *= playerSpeed;
+		AddMovementInput(forwardVector, movementDelta);
+	}
+	// -----------------------------
+	/*FVector newLocation = GetActorLocation();
 	FVector forwardVector = GetActorForwardVector();
 	newLocation += (forwardVector * movementDelta * playerSpeed);
-	SetActorLocation(newLocation);
+	SetActorLocation(newLocation);*/
 }
 
 void AFPCamCharacter::SelectTarget()
