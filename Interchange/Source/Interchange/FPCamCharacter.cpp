@@ -3,6 +3,7 @@
 
 #include "FPCamCharacter.h"
 #include "Components/InputComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
 // Sets default values
@@ -14,13 +15,25 @@ AFPCamCharacter::AFPCamCharacter()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	bUseControllerRotationYaw = false;	// Yaw is defaulted to true?
 
-	//create components
+	//create components //
+
+	// SpringArm
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->bUsePawnControlRotation = true;	// Follow rotation.
+	SpringArm->bDoCollisionTest = true;			// Don't clip!
+
+	// Camera
 	cam = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	
 
 	//setup camera
 	//Camera->FieldOfView = 120.f;					//FOV changer
-	cam->SetupAttachment(RootComponent);			// Attaches to center of player object.
-	cam->SetRelativeLocation(FVector(0, 0, 50));	// ? Might need to be changed for player
+	cam->SetupAttachment(SpringArm, USpringArmComponent::SocketName);		// Attaches to SpringArm
+	cam->SetRelativeLocation(FVector(-2000, 0, 50));	// ? Might need to be changed for player
+
+	cam->bUsePawnControlRotation = false;			// USING SPRING ARM, NOT PLAYER.
+	
 
 	jumping = false;
 	swapAvailable = false;

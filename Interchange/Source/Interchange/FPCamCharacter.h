@@ -38,8 +38,13 @@ private:
 	void HorizontalRotation(float value);
 	void VerticalRotation(float value);
 
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+		class USpringArmComponent* SpringArm;
+
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		UCameraComponent* cam;
+
+	
 
 	// Jump
 	void CheckJump();	// One jump only
