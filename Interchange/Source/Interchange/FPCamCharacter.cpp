@@ -34,11 +34,16 @@ AFPCamCharacter::AFPCamCharacter()
 
 	cam->bUsePawnControlRotation = false;			// USING SPRING ARM, NOT PLAYER.
 	
-
+	//capsule = Children.Last(); <-----Breaks everything
 	jumping = false;
 	swapAvailable = false;
 	swapTarget = (AActor *) NULL;
+	swapping = false;
 	playerSpeed = 7.0f;
+	finalDestination = (FVector) NULL;
+	targetVelocity = (FVector)NULL;
+	playerVelocity = (FVector)NULL;
+	startingPoint = (FVector)NULL;
 
 }
 
@@ -53,6 +58,14 @@ void AFPCamCharacter::BeginPlay()
 void AFPCamCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (swapping)
+	{
+		SetActorLocation(FMath::VInterpTo(GetActorLocation(), finalDestination, DeltaTime, 0.8f));
+		if (GetActorLocation() == finalDestination)
+		{
+			SwapTick();
+		}
+	}
 
 	if (jumping) { Jump(); }	// UNREAL DID IT FOR US!
 }
@@ -146,7 +159,7 @@ void AFPCamCharacter::SelectTarget()
 	bool bHit = GetWorld()->LineTraceSingleByChannel(InteractHit, CamLoc, CamRot.Vector() * 100000.f + CamLoc, ECC_Pawn);
 	if (InteractHits.Num() > 0)
 	{
-		if (bHit)
+		if (bHit && !swapping)
 		{
 			if (InteractHit.GetActor() == InteractHits.GetData()->GetActor())
 			{
@@ -179,20 +192,39 @@ void AFPCamCharacter::SwapPlayerTarget()
 {
 	if (swapAvailable)
 	{
-		FVector finalDestination = swapTarget->GetActorLocation();
-		FVector targetVelocity = swapTarget->GetVelocity();
+		//DATA STORAGE & SETTING
+		finalDestination = swapTarget->GetActorLocation();
+		targetVelocity = swapTarget->GetVelocity();
 		//NEED TO FIGURE OUT HOW TO ACCESS MASS
-		FVector playerVelocity = GetVelocity();
-		FVector startingPoint = GetActorLocation();
+		playerVelocity = GetVelocity();
+		startingPoint = GetActorLocation();
 		swapTarget->SetActorEnableCollision(false);
+		//LERP TIME BABEYYYYYYYYY
+		FVector CurrentPlayerPoint = startingPoint;
+		FVector CurrentTargetPoint = finalDestination;
+		swapping = true;
+		//NEED TO FIGURE OUT HOW TO DISABLE GRAVITY
+		//PROBABLY KEEP THIS AS A WAY TO ENFORCE FINAL POSITIONS
+		/*
 		swapTarget->SetActorLocation(startingPoint);
 		SetActorLocation(finalDestination);
 		GetRootComponent()->ComponentVelocity = targetVelocity;
 		swapTarget->GetRootComponent()->ComponentVelocity = playerVelocity;
 		swapTarget->SetActorEnableCollision(true);
-		
+		*/
 
 	}
+}
+
+void AFPCamCharacter::SwapTick()
+{
+	swapping = false;
+	swapTarget->SetActorLocation(startingPoint);
+	SetActorLocation(finalDestination);
+	GetRootComponent()->ComponentVelocity = targetVelocity;
+	swapTarget->GetRootComponent()->ComponentVelocity = playerVelocity;
+	swapTarget->SetActorEnableCollision(true);
+	//GetRootComponent()->SetSimulatePhysics(false);
 }
 
 void AFPCamCharacter::SpeedUp()

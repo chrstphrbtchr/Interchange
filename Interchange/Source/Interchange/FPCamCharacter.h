@@ -44,6 +44,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		UCameraComponent* cam;
 
+	UPROPERTY(EditAnywhere, Category = "Components")
+		AActor* capsule;
+
 	
 
 	// Jump
@@ -52,6 +55,7 @@ private:
 	// Swap
 	void SelectTarget();
 	void SwapPlayerTarget();
+	void SwapTick();
 
 	//Sprint
 	void SpeedUp();
@@ -62,6 +66,11 @@ private:
 		AActor *swapTarget;
 		bool swapAvailable;
 		float playerSpeed;
+		bool swapping;
+		FVector targetVelocity;
+		FVector playerVelocity;
+		FVector startingPoint;
+		FVector finalDestination;
 
 	void MantleJump();
 };
