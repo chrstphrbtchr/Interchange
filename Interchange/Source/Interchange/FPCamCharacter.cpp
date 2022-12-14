@@ -30,7 +30,7 @@ AFPCamCharacter::AFPCamCharacter()
 	//setup camera
 	//Camera->FieldOfView = 120.f;					//FOV changer
 	cam->SetupAttachment(SpringArm, USpringArmComponent::SocketName);		// Attaches to SpringArm
-	cam->SetRelativeLocation(FVector(-2000, 0, 50));	// ? Might need to be changed for player
+	cam->SetRelativeLocation(FVector(50, 50, 50));	// ? Might need to be changed for player
 
 	cam->bUsePawnControlRotation = false;			// USING SPRING ARM, NOT PLAYER.
 	
