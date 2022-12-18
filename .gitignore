@@ -72,3 +72,14 @@ Interchange/Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 Interchange/DerivedDataCache/*
+
+# Interchange Wwise Project
+Interchange/Interchange_WwiseProject/*
+Interchange/Plugins/Wwise/IncrementalSoundBankData.xml
+Interchange/Plugins/Wwise/.cache/
+Interchange/Plugins/Wwise/.backup/
+Interchange/Plugins/Wwise/*.akd
+Interchange/Plugins/Wwise/*.akpk
+Interchange/Plugins/Wwise/*.prof
+Interchange/Plugins/Wwise/*.validationcache
+Interchange/Plugins/Wwise/*.wsettings
